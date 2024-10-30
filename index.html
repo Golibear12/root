@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        #r {
+            width: 100%;
+            height: 100vh;
+            background-color: #FAF8F5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .j {
+            width: 100%;
+            max-width: 500px;
+            height: 90%;
+            background-color: #FFFFFF;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            flex-direction: column;
+            padding: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        #t {
+            width: 90%;
+            height: 10%;
+            background-color: #F2ECE1;
+            border-radius: 12px;
+            color: #38312A;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 400;
+            padding: 5px;
+            outline: none;
+            border: 1px solid #D2C2B6;
+        }
+
+        #t::placeholder {
+            color: #A78265;
+            opacity: 0.7;
+        }
+
+        ul {
+            width: 100%;
+            height: 70%;
+            overflow-y: auto;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        li {
+            border-radius: 12px;
+            background-color: #E4DAC6;
+            border: 2px solid #34dea5;
+            height: 50px;
+            width: 90%;
+            list-style: none;
+            position: relative;
+            font-size: 14px;
+            font-weight: 400;
+            color: #38312A;
+            padding: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            transform-origin: top;
+        }
+
+        li:hover {
+            background-color: #A78265;
+        }
+
+        li i {
+            cursor: pointer;
+            color: #D95D39;
+            font-weight: bold;
+        }
+
+        .active {
+            text-decoration-line: line-through;
+            text-decoration-thickness: 2px;
+            background-color: green;
+        }
+
+        .fadeIn {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .fadeOut {
+            animation: fadeOut 0.3s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+        }
+
+        /* Responsive styling for smaller screens */
+        @media (max-width: 600px) {
+            #t {
+                font-size: 14px;
+                height: 8%;
+            }
+
+            li {
+                font-size: 12px;
+                height: 45px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="r">
+        <div class="j">
+            <input type="text" id="t" placeholder="Add your task...">
+            <ul id="list">
+                <li>College <i>x</i></li>
+                <li>1000 to infinity <i>x</i></li>
+                <li>20+ book <i>x</i></li>
+                <li>Sta pro <i>x</i></li>
+                <li>New learn <i>x</i></li>
+                <li>fit <i>x</i></li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        const input = document.querySelector('#t');
+        const list = document.querySelector('#list');
+
+        // Function to remove task
+        function removeTask(listItem) {
+            listItem.classList.replace('fadeIn', 'fadeOut');
+            setTimeout(() => listItem.remove(), 300);
+        }
+
+        // Function to toggle strike-through
+        function toggleActive(listItem) {
+            listItem.classList.toggle("active");
+        }
+
+        // Function to add event listeners to a list item
+        function addListenersToListItem(listItem) {
+            // Remove task on clicking the cross
+            listItem.querySelector('i').addEventListener('click', () => removeTask(listItem));
+
+            // Toggle strike-through on clicking the list item
+            listItem.addEventListener('click', () => toggleActive(listItem));
+        }
+
+        // Add task function
+        function addTask() {
+            if (input.value.trim() !== "") {
+                const listItem = document.createElement("li");
+                listItem.classList.add('fadeIn');
+                listItem.innerHTML = `
+                    ${input.value}
+                    <i>x</i>
+                `;
+                addListenersToListItem(listItem); // Add listeners to the new item
+                list.appendChild(listItem);
+                input.value = "";
+            }
+        }
+
+        // Add listeners to existing list items on page load
+        document.querySelectorAll('li').forEach(addListenersToListItem);
+
+        // Add task on Enter key press
+        input.addEventListener('keyup', function (event) {
+            if (event.key === "Enter") addTask();
+        });
+    </script>
+</body>
+
+</html>
